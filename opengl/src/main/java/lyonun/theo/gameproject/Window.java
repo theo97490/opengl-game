@@ -18,29 +18,26 @@ import static org.lwjgl.opengl.GL46.*;
 import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
-public class App {
+public class Window {
 
 	// The window handle
+	private String title;
+	private int width, height;
 	private long window;
 
-	public void run() {
-        System.out.println("Hello LWJGL " + Version.getVersion() + "!");
-
-		init();
-		loop();
-
-		// Free the window callbacks and destroy the window
-		glfwFreeCallbacks(window);
-		glfwDestroyWindow(window);
-
-		// Terminate GLFW and free the error callback
-		glfwTerminate();
-		glfwSetErrorCallback(null).free();
+	public long getWindow() {
+		return window;
 	}
 
-	private void init() {
-		// Setup an error callback. The default implementation
-		// will print the error message in System.err.
+	public Window(String title, int width, int height){
+		this.title = title;
+		this.width = width;
+		this.height = height;
+	}
+
+	public void init() {
+        System.out.println("Hello LWJGL " + Version.getVersion() + "!");
+
 		GLFWErrorCallback.createPrint(System.err).set();
 
 		// Initialize GLFW. Most GLFW functions will not work before doing this.
@@ -60,7 +57,7 @@ public class App {
 		
 		
 		// Create the window
-		window = glfwCreateWindow(500, 500, "Hello World!", NULL, NULL);
+		window = glfwCreateWindow(width, height, title, NULL, NULL);
 		if ( window == NULL )
 			throw new RuntimeException("Failed to create the GLFW window");
 
@@ -96,52 +93,32 @@ public class App {
 
 		// Make the window visible
 		glfwShowWindow(window);
-	}
 
-	private void loop() {
-		// This line is critical for LWJGL's interoperation with GLFW's
-		// OpenGL context, or any context that is managed externally.
-		// LWJGL detects the context that is current in the current thread,
-		// creates the GLCapabilities instance and makes the OpenGL
-		// bindings available for use.
 		GL.createCapabilities();
         System.out.println("OpenGL version " + glGetString(GL_VERSION));
 
-		// Set the clear color
-        glClearColor(0.0f, 0.0f, 0.0f, 0.0f);
-        
-
-        /************************************************************************************/	
-        final float[] vertices = {
-			-0.5f, 0.5f, 0.0f, 	// top-left
-			0.5f, 0.5f, 0.0f, 	// top-right
-			0.5f, -0.5f, 0.0f, 	// bottom-right
-			-0.5f, -0.5f, 0.0f 	// bottom-left
-		};
-
-		final int[] indices = { 
-			0, 1, 2,
-			0, 3, 2
-		 };
-
-
-		 Renderer renderer = new Renderer(window);
-		 Shader shader = new Shader("basic");
-		 Mesh quad 	= new Mesh(vertices, indices, shader);
-		
-		// Run the rendering loop until the user has attempted to close
-		// the window or has pressed the ESCAPE key.
-		while ( !glfwWindowShouldClose(window) ) {
-			
-			renderer.addMesh(quad);
-			renderer.render();
-			
-			
-        }
-    
 	}
 
-	public static void main(String[] args) {
-		new App().run();
+	public void setTitle(){
+
 	}
+
+	public boolean shouldTerminate(){
+		return glfwWindowShouldClose(window);
+	}
+
+	public void update(){
+		glfwSwapBuffers(window); 
+        glfwPollEvents();
+	}
+
+	public void terminate(){
+		glfwFreeCallbacks(window);
+		glfwDestroyWindow(window);
+
+		// Terminate GLFW and free the error callback
+		glfwTerminate();
+		glfwSetErrorCallback(null).free();
+	}
+
 }

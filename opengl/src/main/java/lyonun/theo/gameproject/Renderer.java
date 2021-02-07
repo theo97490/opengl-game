@@ -8,14 +8,11 @@ import java.util.Vector;
 
 public class Renderer {
     private ArrayList<Mesh> meshes;
-    private long window;
 
-    public Renderer(long window){ 
-        this.window = window;
+    public Renderer(){ 
         this.meshes = new ArrayList<Mesh>();
     }
-    public Renderer(long window, ArrayList<Mesh> meshes){ 
-        this.window = window;
+    public Renderer(ArrayList<Mesh> meshes){ 
         this.meshes = meshes;
     }
     
@@ -37,7 +34,5 @@ public class Renderer {
 
         meshes.clear();
         
-        glfwSwapBuffers(window); 
-        glfwPollEvents();
     }
 }

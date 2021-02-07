@@ -15,6 +15,7 @@ public class Mesh {
     private int vertSize = 0;
     private int indexSize = 0;
     private Shader shader;
+    private Texture texture;
 
     public int getEbID() { return ebID;}
     public int getVaID() { return vaID;}
@@ -22,6 +23,7 @@ public class Mesh {
     public int getIndexSize()   {return indexSize;}
     public int getVertSize()    {return vertSize;}
     public Shader getShader()   {return shader;}
+    public Texture getTexture() {return texture;}
 
     public Mesh(float[] vertices, int[] indexes, Shader shader){ 
         FloatBuffer vbuff = MemoryUtil.memAllocFloat(vertices.length).put(vertices).flip();
@@ -48,11 +50,11 @@ public class Mesh {
         MemoryUtil.memFree(vbuff);
         MemoryUtil.memFree(ibuff);
     }
+
     public Mesh(float[] vertices, int[] indexes, Shader shader, Texture texture){
         this(vertices, indexes, shader);
 
     }
-
 
     public void cleanup(){
         glDeleteBuffers(vbID);
