@@ -39,7 +39,7 @@ public class Shader {
         
         glValidateProgram(program);
         if (glGetProgrami(program, GL_VALIDATE_STATUS) == 0)
-            System.err.println("Shader::Shader() Error when linking program\n" + glGetProgramInfoLog(program));
+            System.err.println("Shader::Shader() Error when validating program\n" + glGetProgramInfoLog(program));
 
         glDeleteShader(vshader);
         glDeleteShader(fshader);

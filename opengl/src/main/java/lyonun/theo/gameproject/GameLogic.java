@@ -8,7 +8,7 @@ public class GameLogic extends IGameLogic {
 
 	}
 
-    public void init(Window win){
+    public void init(){
         final float[] vertices = {
 			-0.5f, 0.5f, 0.0f, 	// top-left
 			0.5f, 0.5f, 0.0f, 	// top-right
@@ -18,7 +18,7 @@ public class GameLogic extends IGameLogic {
 
 		final int[] indices = { 
 			0, 1, 2,
-			0, 3, 2
+			0, 3, 2 
 		 };
 		
 		shader   = new Shader("basic");

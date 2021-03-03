@@ -35,6 +35,7 @@ public class Window {
 		this.height = height;
 	}
 
+	//Should be called on the same thread as the renderer
 	public void init() {
         System.out.println("Hello LWJGL " + Version.getVersion() + "!");
 

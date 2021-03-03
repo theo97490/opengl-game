@@ -27,8 +27,7 @@ public class Renderer {
         clear();
 
         for (Mesh mesh : meshes){
-            glBindVertexArray(mesh.getVaID());
-            mesh.getShader().bind();
+            mesh.bindMesh();
             glDrawElements(GL_TRIANGLES, mesh.getIndexSize(), GL_UNSIGNED_INT, 0);
         }
 

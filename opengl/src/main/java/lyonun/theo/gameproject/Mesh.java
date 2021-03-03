@@ -53,7 +53,11 @@ public class Mesh {
 
     public Mesh(float[] vertices, int[] indexes, Shader shader, Texture texture){
         this(vertices, indexes, shader);
+    }
 
+    public void bindMesh(){
+        glBindVertexArray(vaID);
+        shader.bind();
     }
 
     public void cleanup(){
