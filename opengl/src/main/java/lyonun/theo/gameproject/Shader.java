@@ -45,6 +45,17 @@ public class Shader {
         glDeleteShader(fshader);
     }
 
+    public void setUniformText(boolean isSpecular, int index, int value){
+        String name = "_texture" + index;
+
+        if (isSpecular)
+            name += "specular" + name;
+        else
+            name += "diffuse" + name;
+
+        glUniform1i(glGetUniformLocation(program, name), value);
+    }
+
 
     public void bind(){
         glUseProgram(program);
@@ -54,6 +65,7 @@ public class Shader {
         //Unecessary because we just have to use the .use() of an other shader
         glUseProgram(0);
     }
+
 
     public void cleanup(){
         unbind();

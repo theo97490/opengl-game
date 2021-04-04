@@ -53,7 +53,6 @@ public class GameEngine implements Runnable{
             gameLogic.render();
 
             window.update();
-
             syncFps(currTime);
         }
 

@@ -1,7 +1,12 @@
 #version 330 core
 out vec4 FragColor;
 
+uniform sampler2D diffuse_texture1;
+uniform sampler2D specular_texture1;
+in vec2 ctex1;
+
+
 void main()
 {
-    FragColor = vec4(1.0f, 0.0f, 0.0f, 1.0f);
+    FragColor = texture(diffuse_texture1, ctex1);    
 } 

@@ -30,7 +30,7 @@
 			<type>pom</type>
 		</dependency>
 	</dependencies>
-</dependencyManagement>
+  </dependencyManagement>
 
   <dependencies>
     <dependency>

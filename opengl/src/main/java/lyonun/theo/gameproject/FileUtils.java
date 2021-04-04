@@ -4,10 +4,13 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.nio.Buffer;
+import java.nio.ByteBuffer;
 import java.util.Scanner;
 import java.awt.image.BufferedImage;
 
 import javax.imageio.ImageIO;
+
+import org.lwjgl.system.MemoryUtil;
 
 public class FileUtils{
 	
@@ -32,22 +35,6 @@ public class FileUtils{
         
         return content.toString();
 	}
-	/*
-	public static BufferedImage getImage(String path){
-		File file = new File(path);	
-		BufferedImage imgbuff;
+	
 
-		try {
-			imgbuff = ImageIO.read(file);
-			return imgbuff;
-
-		} 
-		catch (Exception e) {
-			e.printStackTrace();
-		}
-
-		
-		
-	}
-	*/
 }
