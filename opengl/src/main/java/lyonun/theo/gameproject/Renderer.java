@@ -45,9 +45,6 @@ public class Renderer {
         if (camera != null){
             clear();
 
-            camera.position = new Vector3f(0,0,-2);
-            camera.rotation = new Vector3f(2,2,2);
-
             for (Mesh mesh : meshes){
                 mesh.bindMesh();
                 FloatBuffer buff = MemoryUtil.memAllocFloat(16);

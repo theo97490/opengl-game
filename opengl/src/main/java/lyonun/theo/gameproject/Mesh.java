@@ -9,7 +9,6 @@ import java.util.ArrayList;
 import org.lwjgl.system.MemoryUtil;
 import org.w3c.dom.Text;
 
-import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
 
 public class Mesh extends WorldObject{
     private int vbID;
