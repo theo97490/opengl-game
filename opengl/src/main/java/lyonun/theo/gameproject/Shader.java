@@ -2,6 +2,10 @@ package lyonun.theo.gameproject;
 
 import static org.lwjgl.opengl.GL46.*;
 
+import java.nio.FloatBuffer;
+
+import org.joml.Matrix4f;
+
 /**
  * Creates a program from a vertex shader and a fragment shader form the shader folder
  */
@@ -55,6 +59,11 @@ public class Shader {
 
         glUniform1i(glGetUniformLocation(program, name), value);
     }
+
+    public void setModelViewProjection(FloatBuffer buffer){
+        glUniformMatrix4fv(glGetUniformLocation(program, "MVP"), false , buffer);
+    }
+
 
 
     public void bind(){

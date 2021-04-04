@@ -35,7 +35,7 @@ public class Texture {
             glGenerateMipmap(GL_TEXTURE_2D);
 
         } catch (IOException e){
-            System.out.println("Va te faire foutre une texture n'existe pas ");
+            System.out.println("NTM une texture n'existe pas ");
         }
     }
 

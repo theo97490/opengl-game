@@ -2,13 +2,15 @@ package lyonun.theo.gameproject;
 
 import java.util.ArrayList;
 
+import org.joml.Matrix4f;
+
 public class GameLogic extends IGameLogic {
     Shader shader;
     Mesh quad;
 
     public void init(){
 		ArrayList<Mesh> meshes = new ArrayList<>(1000);
-		renderer.bindArray(meshes);
+		Camera camera = new Camera();
 
         final float[] vertices = {
 		   -0.5f,  0.5f,  0.0f, 	0f, 0f,		// top-left
@@ -30,8 +32,11 @@ public class GameLogic extends IGameLogic {
 		textures.add(tex);
 
 
-		quad 	 = new Mesh(vertices, indices, shader, textures);
+		quad = new Mesh(vertices, indices, shader, textures);
+	
 		
+		
+		renderer.init(meshes, camera);
 		meshes.add(quad);
     }
 

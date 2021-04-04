@@ -22,8 +22,13 @@ public class Window {
 
 	// The window handle
 	private String title;
-	private int width, height;
+	private int width = 0, height = 0;
+	private static float aspectRatio = 0;
 	private long window;
+
+	public static float getAspectRatio() {
+		return aspectRatio;
+	}
 
 	public long getWindow() {
 		return window;
@@ -33,6 +38,7 @@ public class Window {
 		this.title = title;
 		this.width = width;
 		this.height = height;
+		aspectRatio = width/height;
 	}
 
 	//Should be called on the same thread as the renderer

@@ -11,7 +11,7 @@ import org.w3c.dom.Text;
 
 import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
 
-public class Mesh {
+public class Mesh extends WorldObject{
     private int vbID;
     private int ebID;
     private int vaID;
@@ -29,6 +29,8 @@ public class Mesh {
     public Texture getTexture(int index) {return textures.get(index);}
 
     public Mesh(float[] vertices, int[] indices, Shader shader, ArrayList<Texture> textures){ 
+        super();
+        
         this.vbID = glGenBuffers();
         this.ebID = glGenBuffers();
         this.vaID = glGenVertexArrays();
