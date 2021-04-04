@@ -44,10 +44,15 @@ public class Renderer {
     public void render(){
         if (camera != null){
             clear();
+            FloatBuffer buff = MemoryUtil.memAllocFloat(16);
+
+            //camera.position.y = (float) ( 1 * Math.sin(glfwGetTime()));
+            camera.lookAt(new Vector3f(1, 0, 0));
+            camera.update();
 
             for (Mesh mesh : meshes){
                 mesh.bindMesh();
-                FloatBuffer buff = MemoryUtil.memAllocFloat(16);
+            
                 camera.getViewProjMatrix().mul(new Matrix4f().translate(mesh.position)
                                                              .rotateXYZ(mesh.rotation)).get(buff);
 

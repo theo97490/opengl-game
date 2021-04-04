@@ -10,7 +10,8 @@ public abstract class WorldObject {
     public Vector3f rotation; 
 
     public WorldObject(){
-        position = rotation = new Vector3f(0,0,0);
+        position = new Vector3f(0,0,0);
+        rotation = new Vector3f(0,0,0);
 
     }
     
