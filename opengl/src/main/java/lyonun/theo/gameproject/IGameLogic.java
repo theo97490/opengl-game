@@ -7,7 +7,7 @@ public abstract class IGameLogic {
         renderer = new Renderer();
     }
 
-    public abstract void init();
+    public abstract void init(Window win);
 
     public abstract void input(Window win);
 

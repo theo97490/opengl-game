@@ -23,7 +23,7 @@ public class GameEngine implements Runnable{
 
     public void init(){
         window.init();
-        gameLogic.init();
+        gameLogic.init(window);
     }
 
     public void run(){

@@ -86,7 +86,7 @@ public class Texture {
             On va extraire chaque bit et les ajouter au fur et a mesure dans notre byte buffer
             Prenons par exemple la couleur 0xFF 05 01 B4 
 
-            On veut extraire la couleur rouge étant donc le second bit soit : 05
+            On veut extraire la couleur rouge étant donc le second couple de byte soit : 05
             On va décaller toute la séquence de bit vers à droite (pixel >> 16)
             pour avoir la valeur 05 à la fin de la séquence pour bien avoir
             la valeur 05 en sortie ( sinon on aurait en sortie 5 * 16^2 = 1280 au lieu de 5 si on décalle pas)

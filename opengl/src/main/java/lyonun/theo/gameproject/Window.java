@@ -101,6 +101,9 @@ public class Window {
 		// Make the window visible
 		glfwShowWindow(window);
 
+		// Le curseur sera invisible et ne quittera pas la fenêtre
+		glfwSetInputMode(window, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
 		GL.createCapabilities();
         System.out.println("OpenGL version " + glGetString(GL_VERSION));
 
@@ -112,6 +115,10 @@ public class Window {
 
 	public boolean shouldTerminate(){
 		return glfwWindowShouldClose(window);
+	}
+
+	public void setMouseCursorCallback(GLFWCursorPosCallbackI callback){
+		glfwSetCursorPosCallback(window, callback);
 	}
 
 	public void update(){
