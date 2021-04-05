@@ -34,7 +34,7 @@ public class GameLogic extends IGameLogic {
 		
 		
 		shader   = new Shader("basic");
-		Texture tex = new Texture("opengl/textures/grass-block.jpg", false);
+		Texture tex = new Texture("./textures/grass-block.jpg", false);
 		ArrayList<Texture> textures = new ArrayList<>();
 		textures.add(tex);
 

@@ -2,6 +2,7 @@ package lyonun.theo.gameproject;
 
 import org.lwjgl.glfw.GLFW;
 
+
 public class GameEngine implements Runnable{
     private final Thread gameloopThread;
     private IGameLogic gameLogic;
@@ -53,6 +54,7 @@ public class GameEngine implements Runnable{
             gameLogic.render();
 
             window.update();
+
             syncFps(currTime);
         }
 
@@ -62,7 +64,6 @@ public class GameEngine implements Runnable{
 
     public void syncFps(double currTime){
         double endTime = currTime + awaitTime;
-
         while (GLFW.glfwGetTime() < endTime){
             try {
                 Thread.sleep(1);

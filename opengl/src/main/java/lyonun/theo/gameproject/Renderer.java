@@ -46,7 +46,7 @@ public class Renderer {
             clear();
             FloatBuffer buff = MemoryUtil.memAllocFloat(16);
 
-            camera.applyRotation(new Vector3f(  0 , (float) (Math.PI/2 * Math.sin(glfwGetTime())) , 0));
+            camera.applyRotation(new Vector3f(  0 , 0.01f, 0));
             camera.update();
 
             for (Mesh mesh : meshes){

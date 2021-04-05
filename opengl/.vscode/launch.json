@@ -9,7 +9,6 @@
             "name": "Launch Main",
             "request": "launch",
             "mainClass": "lyonun.theo.gameproject.Main",
-            "args": "-Djava.library.path /home/theo/.m2/repository",
             "projectName": "opengl"
         },
         {

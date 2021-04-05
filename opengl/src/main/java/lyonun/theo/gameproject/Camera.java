@@ -7,7 +7,6 @@ import static org.lwjgl.glfw.GLFW.*;
 import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
-import jdk.javadoc.internal.doclets.formats.html.SourceToHTMLConverter;
 
 public class Camera extends WorldObject{
     public Vector3f lookDirection;
@@ -16,7 +15,7 @@ public class Camera extends WorldObject{
     public static final Vector3f vecUp = new Vector3f(0, 1, 0);
     private final Matrix4f perspective;
 
-    // Non final : On ne va pas gérer l'input de la souris dans la camera
+    // HACK : On ne va pas gérer l'input de la souris dans la camera
     public double xmouse;
     public double ymouse;
     
@@ -48,17 +47,18 @@ public class Camera extends WorldObject{
     public void applyRotation(Vector3f rot){
         rotation.add(rot);
 
-        //TODO Faire une class MathLib pour y mettre cette fonction 
+        //TODO Ranger le code dans une fonction dans une autre classe, à réutiliser
+        rotation.x = rotation.x - (float)(2 * Math.PI * (int)(rotation.x / (2 * Math.PI)));
+        rotation.y = rotation.y - (float)(2 * Math.PI * (int)(rotation.y / (2 * Math.PI)));
+        rotation.z = rotation.z - (float)(2 * Math.PI * (int)(rotation.z / (2 * Math.PI)));
+        
 
-        rotation.x = rotation.x - (int)(rotation.x % (2 * (float)Math.PI));
-        rotation.y = rotation.y - (int)(rotation.y % (2 * (float)Math.PI));
-        rotation.z = rotation.z - (int)(rotation.z % (2 * (float)Math.PI));
-
+        //TODO Ranger le code dans une fonction dans une autre classe, à réutiliser
         // Calcule la valeur lookDirection si on set avec applyRotation
-        // + 90deg sur x 
-        lookDirection.x = (float) (Math.cos(rot.y + Math.PI/2)) ;
-        lookDirection.y = (float) (Math.sin(rot.x));
-        lookDirection.z = (float) (Math.cos(rot.x));
+        
+        lookDirection.x = (float) (Math.cos(rotation.y) * Math.cos(rotation.x)) ;
+        lookDirection.y = (float) (Math.sin(rotation.x));
+        lookDirection.z = (float) (Math.sin(rotation.y) * Math.cos(rotation.x));
     }
 
     public void update(){

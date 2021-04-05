@@ -22,8 +22,8 @@ public class Shader {
         int fshader = glCreateShader(GL_FRAGMENT_SHADER);
         program = glCreateProgram();
 
-        final String vcode = FileUtils.getContent("./opengl/shaders/" + vertpath);
-        final String fcode = FileUtils.getContent("./opengl/shaders/" + fragpath);
+        final String vcode = FileUtils.getContent("./shaders/" + vertpath);
+        final String fcode = FileUtils.getContent("./shaders/" + fragpath);
 
         glShaderSource(vshader, vcode);
         glCompileShader(vshader);
