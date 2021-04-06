@@ -38,19 +38,19 @@ public class GameLogic extends IGameLogic {
 		ArrayList<Texture> textures = new ArrayList<>();
 		textures.add(tex);
 
-
-		quad = new Mesh(vertices, indices, shader, textures);
+		quad = new Mesh(vertices, indices, textures);
 	
-		
-		
-		renderer.init(meshes, camera);
 		meshes.add(quad);
+
+		renderer = new Renderer(meshes, camera, shader);
     }
 
 	public void input(Window win){
 		camera.input(win);
 
 	}
-	public void update(){}
+	public void update(){
+		//a
+	}
 
 }

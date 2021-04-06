@@ -60,7 +60,7 @@ public class Shader {
         glUniform1i(glGetUniformLocation(program, name), value);
     }
 
-    public void setModelViewProjection(FloatBuffer buffer){
+    public void setMVP(FloatBuffer buffer){
         glUniformMatrix4fv(glGetUniformLocation(program, "MVP"), false , buffer);
     }
 

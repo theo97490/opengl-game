@@ -16,25 +16,21 @@ import java.nio.FloatBuffer;
 public class Renderer {
     private ArrayList<Mesh> meshes;
     private Camera camera;
+    private Shader shader;
 
-    public Renderer(){ 
-        this.meshes = new ArrayList<Mesh>();
-    }
-    public Renderer(ArrayList<Mesh> meshes){ 
+    public Renderer(ArrayList<Mesh> meshes, Camera camera, Shader shader){
         bindArray(meshes);
+        this.camera = camera;
+        this.shader = shader;
     }
 
     public void bindArray(ArrayList<Mesh> meshes){
         this.meshes = meshes;
     }
 
-    public void bindCamera(Camera camera){
-        this.camera = camera;
-    }
 
-    public void init(ArrayList<Mesh> meshes, Camera camera){
-        bindArray(meshes);
-        bindCamera(camera);
+    public void setShader(Shader shader) {
+        this.shader = shader;
     }
 
     public void clear(){
@@ -50,15 +46,14 @@ public class Renderer {
             camera.update();
 
             for (Mesh mesh : meshes){
-                mesh.bindMesh();
-            
+
                 camera.getViewProjMatrix().mul(new Matrix4f().translate(mesh.position)
                                                              .rotateXYZ(mesh.rotation)).get(buff);
 
-
-                mesh.getShader().setModelViewProjection(buff);
+                shader.setMVP(buff);
                 
-                glDrawElements(GL_TRIANGLES, mesh.getIndexSize(), GL_UNSIGNED_INT, 0);
+                mesh.draw(shader);
+
             }
         }
         
