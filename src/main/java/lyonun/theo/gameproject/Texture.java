@@ -13,13 +13,13 @@ import java.nio.ByteBuffer;
 
 public class Texture {
     private int textID;
-    private boolean isSpecular;
+    private String type;
 
-    public boolean isSpecular() { return isSpecular; }
+    public String getType() { return type; }
 
-    public Texture(String image, boolean isSpecular){
+    public Texture(File image, String type){
         this.textID = glGenTextures();
-        this.isSpecular = isSpecular;
+        this.type = type;
 
 
         glBindTexture(GL_TEXTURE_2D, textID);
@@ -29,7 +29,7 @@ public class Texture {
         glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
         
         try{ 
-            BufferedImage img = ImageIO.read(new File(image));
+            BufferedImage img = ImageIO.read(image);
 
             glTexImage2D(GL_TEXTURE_2D, 0, GL_RGB, img.getWidth(), img.getHeight(), 0, GL_RGBA, GL_UNSIGNED_BYTE, getImageByteBufferRGBA(img));
             glGenerateMipmap(GL_TEXTURE_2D);

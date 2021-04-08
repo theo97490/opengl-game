@@ -6,44 +6,50 @@ import java.nio.FloatBuffer;
 
 import org.joml.Matrix4f;
 
+import static lyonun.theo.gameproject.RessourceManager.*;
+
 /**
  * Creates a program from a vertex shader and a fragment shader form the shader folder
  */
 
 public class Shader {
+    private String name;
     private int program;
 
-    public int getProgramID() {return program;}
+    public int getProgramID()   {return program;}
+    public String getName()     {return name;}
 
     /** @param shaderName : The name for both .vert and .frag files */
-    public Shader(String shaderName) {this(shaderName + ".vert", shaderName +".frag");};
-    public Shader(String vertpath, String fragpath) {
+    public Shader(String shaderName) {this(shaderName, shaderName, shaderName);};
+    public Shader(String name, String vertname, String fragname) {
+        this.name = name;
+
         int vshader = glCreateShader(GL_VERTEX_SHADER);
         int fshader = glCreateShader(GL_FRAGMENT_SHADER);
         program = glCreateProgram();
 
-        final String vcode = FileUtils.getContent("./shaders/" + vertpath);
-        final String fcode = FileUtils.getContent("./shaders/" + fragpath);
+        final String vcode = FileUtils.getContent(SHADER_PATH + vertname + ".vert");
+        final String fcode = FileUtils.getContent(SHADER_PATH + fragname + ".frag");
 
         glShaderSource(vshader, vcode);
         glCompileShader(vshader);
         if (glGetShaderi(vshader, GL_COMPILE_STATUS) == 0)
-            System.err.println("Shader::Shader() Error in vertex shader code\n" + glGetShaderInfoLog(vshader));
+            System.err.println("Shader: Error in vertex shader code\n" + glGetShaderInfoLog(vshader));
         
         glShaderSource(fshader, fcode);
         glCompileShader(fshader);
         if (glGetShaderi(fshader, GL_COMPILE_STATUS) == 0)
-            System.err.println("Shader::Shader() Error in fragment shader code\n" + glGetShaderInfoLog(fshader));
+            System.err.println("Shader: Error in fragment shader code\n" + glGetShaderInfoLog(fshader));
         
         glAttachShader(program, vshader);
         glAttachShader(program, fshader);
         glLinkProgram(program);
         if (glGetProgrami(program, GL_LINK_STATUS) == 0)
-            System.err.println("Shader::Shader() Error when linking program\n" + glGetProgramInfoLog(program));
+            System.err.println("Shader: Error when linking program\n" + glGetProgramInfoLog(program));
         
         glValidateProgram(program);
         if (glGetProgrami(program, GL_VALIDATE_STATUS) == 0)
-            System.err.println("Shader::Shader() Error when validating program\n" + glGetProgramInfoLog(program));
+            System.err.println("Shader: Error when validating program\n" + glGetProgramInfoLog(program));
 
         glDeleteShader(vshader);
         glDeleteShader(fshader);

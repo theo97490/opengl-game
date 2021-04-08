@@ -16,16 +16,20 @@ public class Mesh extends WorldObject{
     private int vaID;
     private int vertSize = 0;
     private int indexSize = 0;
-    private ArrayList<Texture> textures;
+    private Texture[] textures;
 
     public int getEbID() { return ebID;}
     public int getVaID() { return vaID;}
     public int getVbID() { return vbID;}
     public int getIndexSize()   {return indexSize;}
     public int getVertSize()    {return vertSize;}
-    public Texture getTexture(int index) {return textures.get(index);}
+    public Texture getTexture(int index) {return textures[index];}
+    
+    public void setTextures(Texture[] textures) {
+        this.textures = textures;
+    }
 
-    public Mesh(float[] vertices, int[] indices, ArrayList<Texture> textures){ 
+    public Mesh(float[] vertices, int[] indices, Texture[] textures){ 
         super();
         
         this.vbID = glGenBuffers();
@@ -69,10 +73,10 @@ public class Mesh extends WorldObject{
         int specCount = 0;
         int diffCount = 0;
     
-        for (int i = 0; i < textures.size(); i++){
+        for (int i = 0; i < textures.length; i++){
             
             //Assigne une Texture_ID à chaque uniform du shader 
-            boolean specular = textures.get(i).isSpecular();
+            boolean specular = textures[i].getType().equals("specular");
             if (specular){
                 specCount++;
                 shader.setUniformText(specular, specCount, i);
@@ -89,9 +93,9 @@ public class Mesh extends WorldObject{
 
         mapTextureUniforms(shader);
         
-        for (int i = 0; i < textures.size(); i++ ){
+        for (int i = 0; i < textures.length; i++ ){
             glActiveTexture(i);
-            textures.get(i).bind();
+            textures[i].bind();
         }
 
         glDrawElements(GL_TRIANGLES, getIndexSize(), GL_UNSIGNED_INT, 0);

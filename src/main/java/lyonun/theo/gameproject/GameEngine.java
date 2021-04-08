@@ -24,6 +24,7 @@ public class GameEngine implements Runnable{
 
     public void init(){
         window.init();
+        RessourceManager.init();
         gameLogic.init(window);
     }
 
@@ -36,7 +37,6 @@ public class GameEngine implements Runnable{
         double currTime, timeElapsed;
         double prevTime = GLFW.glfwGetTime();
 
-        
         while (!window.shouldTerminate()){
 
             currTime = GLFW.glfwGetTime();

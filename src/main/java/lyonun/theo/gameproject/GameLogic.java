@@ -9,6 +9,8 @@ import org.joml.Vector3f;
 
 import static org.lwjgl.glfw.GLFW.*;
 
+import static lyonun.theo.gameproject.RessourceManager.*;
+
 public class GameLogic extends IGameLogic {
     Shader shader;
     Mesh quad;
@@ -33,12 +35,9 @@ public class GameLogic extends IGameLogic {
 
 		
 		
-		shader   = new Shader("basic");
-		Texture tex = new Texture("./textures/grass-block.jpg", false);
-		ArrayList<Texture> textures = new ArrayList<>();
-		textures.add(tex);
+		shader = getShader("basic");
 
-		quad = new Mesh(vertices, indices, textures);
+		quad = new Mesh(vertices, indices, getTextures("grass-block"));
 	
 		meshes.add(quad);
 
