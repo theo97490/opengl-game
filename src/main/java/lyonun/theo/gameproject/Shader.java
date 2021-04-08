@@ -6,7 +6,7 @@ import java.nio.FloatBuffer;
 
 import org.joml.Matrix4f;
 
-import static lyonun.theo.gameproject.RessourceManager.*;
+import static lyonun.theo.gameproject.Ressources.*;
 
 /**
  * Creates a program from a vertex shader and a fragment shader form the shader folder

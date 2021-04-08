@@ -23,11 +23,12 @@ public class Camera extends WorldObject{
     // sans modifier l'instance actuelle dans la classe
     public Matrix4f getViewProjMatrix() { return new Matrix4f(viewProjMatrix); }
     public Vector3f getLookDirection() { return new Vector3f(lookDirection); }
+    public static Vector3f getVecup() { return new Vector3f(vecUp); }
 
     public Camera(Window win){
 
         this.perspective = new Matrix4f().perspective((float)Math.PI/2, Window.getAspectRatio(), 0.1f, 100f);
-        this.position = new Vector3f(0,0,-1);
+        this.position = new Vector3f(0,0,1);
         this.rotation = new Vector3f(0,0,0);
         
         this.lookAt(new Vector3f(0,0,0));
@@ -40,9 +41,6 @@ public class Camera extends WorldObject{
 
     }
 
-    private void calculateRotation(){
-       
-    }
 
     public void applyRotation(Vector3f rot){
         rotation.add(rot);
@@ -99,6 +97,12 @@ public class Camera extends WorldObject{
 		}
 		if (glfwGetKey(win.getWindow(), GLFW_KEY_D) == GLFW_PRESS){
 			position.add(getLookDirection().cross(vecUp).normalize().mul(moveSpeed));
+		}
+        if (glfwGetKey(win.getWindow(), GLFW_KEY_Q) == GLFW_PRESS){
+			position.add(getVecup().mul(moveSpeed));
+		}
+        if (glfwGetKey(win.getWindow(), GLFW_KEY_E) == GLFW_PRESS){
+			position.sub(getVecup().mul(moveSpeed));
 		}
     }
 

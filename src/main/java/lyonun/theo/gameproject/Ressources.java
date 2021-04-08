@@ -8,20 +8,19 @@ import java.util.HashMap;
 import javax.management.RuntimeErrorException;
 import java.io.FileFilter;
 
+import jdk.dynalink.Namespace;
 import jdk.dynalink.beans.StaticClass;
 
-public final class RessourceManager {
+public final class Ressources {
 	public static final String SHADER_PATH = "./shaders/";
 	public static final String TEXTURE_PATH = "./textures/";
 	public static final String MODEL_PATH = "./models/";
 
     private static final String[] SHADER_EXT = {".frag",".vert"}; /*".geom", ".tess", ".comp" , ".eval" Si on utilise un jour lol */
-    private static final String TEXTURE_TYPE = "diffuse|specular"; /*".geom", ".tess", ".comp" , ".eval" Si on utilise un jour lol */
+    private static final String TEXTURE_TYPE = "diffuse|specular"; 
 
     private static ArrayList<Shader> shaders = new ArrayList<>();
-    private static HashMap<String, Texture[]> textures = new HashMap<>();
-    //HashMap => Comme dictionnaire en python : Association d'un identifiant/nom avec une valeur, 
-    //On stocke ici un ensemble de texture sous un même nom 
+    private static ArrayList<VoxModel> voxModels = new ArrayList<>();
 
     public static void init(){
         //TODO Init des shaders écrit à la main , vu que l'on peut réutiliser plusieurs fois un même shader
@@ -29,17 +28,21 @@ public final class RessourceManager {
     
         shaders.add(new Shader("basic"));
 
+        //HACK hardcoded
+        VoxModel.initVoxelMesh(processVoxTextures(new File(TEXTURE_PATH + "grass-block")));
+
         //Textures de Voxels, chacune des textures sont rangées dans leur dossier suivant la convention nomdurépertoire-typetexture0.png
         File[] files = new File(TEXTURE_PATH).listFiles();
         for (File directory : files){
             if (directory.isDirectory()){
-                processTextures(directory);
+                voxModels.add(new VoxModel(directory.getName(), processVoxTextures(directory)));
             }
         }
 
+
     }
 
-    private static void processTextures(File dir) {
+    private static Texture[] processVoxTextures(File dir) {
 
         //Récupère les fichier dont le nom match la forme : nomdurépertoire-typetexture0.png
         File[] ftextures = dir.listFiles(new FileFilter(){
@@ -57,8 +60,7 @@ public final class RessourceManager {
             texList[i] = (new Texture(ftextures[i], textureType));
         }
 
-        textures.put(dir.getName(), texList);
-    
+        return texList;
     }
 
     public static Shader getShader(String name) {
@@ -70,14 +72,17 @@ public final class RessourceManager {
         //On ne veut pas gérer cette exception car c'est une erreur dans le programme 
         //et pas de l'utilisateur, on utilise Runtime exception pour ne pas à avoir
         //A la gérer
-        throw new RuntimeException("Impossible de trouver le shader : " + name);
+        throw new RuntimeException("Ressources: Impossible de trouver le shader : " + name);
     }
 
-    public static Texture[] getTextures(String name) {
-        return textures.get(name);
+    public static VoxModel getVoxModel(String name) {
+        for (VoxModel vox : voxModels){
+            if (vox.getName().equals(name))
+                return vox;
+        }
+
+        throw new RuntimeException("Ressources: Impossible de trouver le VoxModel" + name);
     }
-
-
     
 
 }

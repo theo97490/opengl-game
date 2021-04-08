@@ -95,6 +95,8 @@ public class Window {
 
 		// Make the OpenGL context current
 		glfwMakeContextCurrent(window);
+
+
 		// Enable v-sync
 		glfwSwapInterval(1);
 
@@ -107,6 +109,7 @@ public class Window {
 		GL.createCapabilities();
         System.out.println("OpenGL version " + glGetString(GL_VERSION));
 
+		glEnable(GL_DEPTH_TEST);  
 	}
 
 	public void setTitle(){

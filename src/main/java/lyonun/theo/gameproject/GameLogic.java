@@ -9,39 +9,24 @@ import org.joml.Vector3f;
 
 import static org.lwjgl.glfw.GLFW.*;
 
-import static lyonun.theo.gameproject.RessourceManager.*;
+import static lyonun.theo.gameproject.Ressources.*;
 
 public class GameLogic extends IGameLogic {
     Shader shader;
-    Mesh quad;
-	ArrayList<Mesh> meshes;
+	ArrayList<Renderable> renderQueue;
 	Camera camera;
 
     public void init(Window win){
-		meshes = new ArrayList<>(1000);
+		renderQueue = new ArrayList<>(1000);
 		camera = new Camera(win);
-
-        final float[] vertices = {
-		   -0.5f,  0.5f,  0.0f, 	0f, 0f,		// top-left
-			0.5f,  0.5f,  0.0f,		1f, 0f,		// top-right
-			0.5f, -0.5f,  0.0f, 	1f, 1f,		// bottom-right
-		   -0.5f, -0.5f,  0.0f, 	0f, 1f		// bottom-left
-		};
-
-		final int[] indices = { 
-			0, 1, 2,
-			0, 3, 2 
-		};
-
-		
 		
 		shader = getShader("basic");
 
-		quad = new Mesh(vertices, indices, getTextures("grass-block"));
 	
-		meshes.add(quad);
+		renderQueue.add(getVoxModel("grass-block"));
 
-		renderer = new Renderer(meshes, camera, shader);
+		renderer = new Renderer(renderQueue, camera, Ressources.getShader("basic"));
+		camera.lookDirection = new Vector3f(0.5f, -0.5f, 0);
     }
 
 	public void input(Window win){

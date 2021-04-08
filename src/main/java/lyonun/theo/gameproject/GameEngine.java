@@ -24,7 +24,7 @@ public class GameEngine implements Runnable{
 
     public void init(){
         window.init();
-        RessourceManager.init();
+        Ressources.init();
         gameLogic.init(window);
     }
 

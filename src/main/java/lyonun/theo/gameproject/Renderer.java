@@ -14,18 +14,19 @@ import java.nio.FloatBuffer;
 
 
 public class Renderer {
-    private ArrayList<Mesh> meshes;
+    private ArrayList<Renderable> renderQueue;
     private Camera camera;
     private Shader shader;
 
-    public Renderer(ArrayList<Mesh> meshes, Camera camera, Shader shader){
+    public Renderer(ArrayList<Renderable> meshes, Camera camera, Shader shader){
         bindArray(meshes);
         this.camera = camera;
         this.shader = shader;
+
     }
 
-    public void bindArray(ArrayList<Mesh> meshes){
-        this.meshes = meshes;
+    public void bindArray(ArrayList<Renderable> renderQueue){
+        this.renderQueue = renderQueue;
     }
 
 
@@ -40,19 +41,12 @@ public class Renderer {
     public void render(){
         if (camera != null){
             clear();
-            FloatBuffer buff = MemoryUtil.memAllocFloat(16);
 
-            camera.applyRotation(new Vector3f(  0 , 0.01f, 0));
             camera.update();
 
-            for (Mesh mesh : meshes){
+            for (Renderable renderable : renderQueue){
 
-                camera.getViewProjMatrix().mul(new Matrix4f().translate(mesh.position)
-                                                             .rotateXYZ(mesh.rotation)).get(buff);
-
-                shader.setMVP(buff);
-                
-                mesh.draw(shader);
+                renderable.draw(camera.getViewProjMatrix());
 
             }
         }

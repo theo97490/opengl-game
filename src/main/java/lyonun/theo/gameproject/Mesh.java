@@ -10,7 +10,7 @@ import org.lwjgl.system.MemoryUtil;
 import org.w3c.dom.Text;
 
 
-public class Mesh extends WorldObject{
+public class Mesh {
     private int vbID;
     private int ebID;
     private int vaID;
@@ -76,6 +76,7 @@ public class Mesh extends WorldObject{
         for (int i = 0; i < textures.length; i++){
             
             //Assigne une Texture_ID à chaque uniform du shader 
+            //HACK Réecrire pour prendre en charge chaque d'autre types de textures
             boolean specular = textures[i].getType().equals("specular");
             if (specular){
                 specCount++;
