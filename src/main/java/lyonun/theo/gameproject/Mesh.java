@@ -18,12 +18,12 @@ public class Mesh {
     private int indexSize = 0;
     private Texture[] textures;
 
-    public int getEbID() { return ebID;}
-    public int getVaID() { return vaID;}
-    public int getVbID() { return vbID;}
-    public int getIndexSize()   {return indexSize;}
-    public int getVertSize()    {return vertSize;}
-    public Texture getTexture(int index) {return textures[index];}
+    protected int getEbID() { return ebID;}
+    protected int getVaID() { return vaID;}
+    protected int getVbID() { return vbID;}
+    protected int getIndexSize()   {return indexSize;}
+    protected int getVertSize()    {return vertSize;}
+    protected Texture getTexture(int index) {return textures[index];}
     
     public void setTextures(Texture[] textures) {
         this.textures = textures;
