@@ -45,7 +45,7 @@ public class Mesh {
                                       
         IntBuffer ibuff = MemoryUtil.memAllocInt(indices.length)
                                     .put(indices)
-                                    .flip();
+                                    .flip();   
 
         glBindVertexArray(vaID);
         
@@ -78,12 +78,13 @@ public class Mesh {
             //Assigne une Texture_ID à chaque uniform du shader 
             //HACK Réecrire pour prendre en charge chaque d'autre types de textures
             boolean specular = textures[i].getType().equals("specular");
+
             if (specular){
-                specCount++;
                 shader.setUniformText(specular, specCount, i);
+                specCount++;
             } else {
-                diffCount++;
                 shader.setUniformText(specular, diffCount, i);
+                diffCount++;
             }
         }
     }
