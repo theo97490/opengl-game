@@ -15,6 +15,12 @@ public class Uniform {
         size = 0;
     }
 
+    public Uniform(String name, int type, int size){
+        this.name = name;
+        this.type = type;
+        this.size = size;
+    }
+
     public void println(){
         System.out.println(name);
         System.out.println(type);

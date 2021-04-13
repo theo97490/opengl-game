@@ -4,8 +4,10 @@ import static org.lwjgl.opengl.GL46.*;
 
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
+import java.util.Arrays;
 
 import org.joml.Matrix4f;
+import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
 
 import static lyonun.theo.gameproject.Ressources.*;
@@ -74,62 +76,49 @@ public class Shader {
     }
 
     private void retrieveUniforms(){
-        this.uniforms = new Uniform[glGetProgrami(program, GL_ACTIVE_UNIFORMS)];
-        IntBuffer typebuff = MemoryUtil.memAllocInt(1);
-        IntBuffer sizebuff = MemoryUtil.memAllocInt(1);
-        
-        for(int i = 0; i < uniforms.length; i++){
-            uniforms[i] = new Uniform();
-            uniforms[i].name = glGetActiveUniform(program, i, sizebuff, typebuff);
-            uniforms[i].size = sizebuff.get(0); 
-            uniforms[i].type = typebuff.get(0); 
-            uniforms[i].println();
+        try (MemoryStack stack = MemoryStack.stackPush()){
+            Uniform[] uniforms = new Uniform[glGetProgrami(program, GL_ACTIVE_UNIFORMS)];
+            IntBuffer typebuff = stack.mallocInt(1);
+            IntBuffer sizebuff = stack.mallocInt(1);
+            
+            int unifCount = uniforms.length;
+            int arrIndex = 0;
+            for(int i = 0; i < uniforms.length; i++){
+                
+                String name = glGetActiveUniform(program, i, sizebuff, typebuff);
 
+                //INFO Skip si l'uniform concerne une texture, on le gére autrement.
+                if ( typebuff.get(0) != GL_SAMPLER_2D ){
+                    uniforms[arrIndex] = new Uniform(name, typebuff.get(0), sizebuff.get(0));
+                    arrIndex++;
+
+                    uniforms[i].println();
+                }
+
+            }
+
+            this.uniforms = Arrays.copyOf(uniforms, arrIndex);
         }
+        
     }
+
 
     public int locateUniform(String name){
         return glGetUniformLocation(program, name);
     }
     
-    /*
+    /** 
     * Retourne l'index dans le tableau Uniform d'un uniform
+    * Retourne -1 si l'uniform n'existe pas
     */
     public int getUniformIndex(String name){
         for (int i = 0; i < uniforms.length; i++){
-            if (uniforms[i].name == name)
+            if (uniforms[i].name.equals(name))
                 return i;
         }
 
-        throw new Error("Shader: Couldn't retrieve uniform " + name + " from array");
+        return -1;
     }
-
-    public int getUniformLength(){
-        return uniforms.length;
-    }
-
-    public Uniform getUniform(int index){
-        return uniforms[index];
-    }
-
-    public void setUniformText(boolean isSpecular, int index, int value){
-        String name = "_texture" + index;
-
-        if (isSpecular)
-            name += "specular" + name;
-        else
-            name += "diffuse" + name;
-
-        glUniform1i(glGetUniformLocation(program, name), value);
-    }
-
-    public void setMVP(FloatBuffer buffer){
-        glUniformMatrix4fv(glGetUniformLocation(program, "MVP"), false , buffer);
-    }
-
-    
-
-
 
     public void bind(){
         glUseProgram(program);

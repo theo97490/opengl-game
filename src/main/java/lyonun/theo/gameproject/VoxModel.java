@@ -4,11 +4,17 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.system.MemoryStack;
 import org.lwjgl.system.MemoryUtil;
+
+import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
+
+import static org.lwjgl.opengl.GL46.*;
+
 
 public class VoxModel extends Renderable{
     //TODO Ajouter les normales quand on pourra les gérer ici
     //TODO Changer les coordonées des textures quand on aura les textures des 4 cotés 
+    private static Mesh mesh;
     
     public static final float[] vertices = {
         //Face avant
@@ -53,9 +59,7 @@ public class VoxModel extends Renderable{
 
     };
 
-    private static Mesh mesh;
-    
-    private Texture[] textures;
+    private Material material;
     private String name;
 
     public String getName() {
@@ -63,15 +67,17 @@ public class VoxModel extends Renderable{
     }
 
     public static void initVoxelMesh(Texture[] initTexts){
-        mesh = new Mesh(vertices, indices, initTexts); 
+        Material mat = new Material("basic");
+        mat.setTextures(initTexts);
+
+        mesh = new Mesh(vertices, indices, mat); 
     }
 
-    public VoxModel(String name, Texture[] textures){
+    public VoxModel(String name, Material material){
         if (this.mesh == null)
             throw new RuntimeException("Un voxel à été crée mais this.mesh est null, initVoxelMesh n'as pas été appellé ?");
 
-        this.shader = Ressources.getShader("basic");
-        this.textures = textures;
+        this.material = material;
         this.name = name;
 
         this.position = new Vector3f(0,0,0);
@@ -80,19 +86,16 @@ public class VoxModel extends Renderable{
     }
 
     public void draw(Matrix4f projView){
-        mesh.setTextures(textures);
-    
-        //Block try-with-ressources, la ressource stack est fermée en fin de block
-        //TODO Comprendre mémoire on-heap / off-heap pourquoi on doit faire ça)
-        try(MemoryStack stack = MemoryStack.stackPush()){
-            FloatBuffer buff = stack.mallocFloat(16);
-
-            projView.mul(new Matrix4f().translate(position).rotateXYZ(rotation)).get(buff);
-            shader.setMVP(buff);
-        }
+        mesh.setMaterial(material);
         
+        ByteBuffer buff = MemoryUtil.memAlloc(16 * 4);
 
-        mesh.draw(shader);
+        projView.mul(new Matrix4f().translate(position).rotateXYZ(rotation)).get(buff);
+        material.setParameters("MVP", buff);
+
+        mesh.draw();
+
+       
     }
 
 }

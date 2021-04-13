@@ -10,14 +10,25 @@ import org.lwjgl.opencl.CL;
 import org.lwjgl.system.MemoryUtil;
 
 import static org.lwjgl.opengl.GL46.*;
+import static lyonun.theo.gameproject.MaterialConstants.*;
 
 public class Material {
+    private String name;
     private Shader shader;
     private ByteBuffer[] settings;
     private Texture[] textures;
 
+    public String getName() {
+        return name;
+    }
+
     public Material(Shader shader){
         this.shader = shader;
+        this.settings = new ByteBuffer[shader.getUniforms().length];
+    }
+
+    public Material(String shadername){
+        this.shader = Ressources.getShader(shadername);
         this.settings = new ByteBuffer[shader.getUniforms().length];
     }
 
@@ -51,11 +62,14 @@ public class Material {
     public void setParameters(String pname, ByteBuffer data){
         int index = shader.getUniformIndex(pname);
 
-        if (this.settings[index] != null)
-            MemoryUtil.memFree(this.settings[index]);
+        if (index >= 0){
+            if (this.settings[index] != null)
+                MemoryUtil.memFree(this.settings[index]);
 
-        this.settings[index] = data;
-
+            this.settings[index] = data;
+        }
+        else
+            System.out.println("Material: Le paramètre " + pname + " n'existe pas dans le shader " + shader.getName());
     }
 
     public void setTextures(Texture[] textures){
@@ -63,6 +77,7 @@ public class Material {
     }
 
     public void mapTextureUniforms(){
+        //TODO check si il y a bien assez de uniform texture avant d'envoyer le mapping des textures
         // Précise le format des données des textures dans le tableau et leur emplacement 
         int specCount = 0;
         int diffCount = 0;
@@ -74,10 +89,10 @@ public class Material {
             boolean specular = textures[i].getType().equals("specular");
 
             if (specular){
-                shader.setUniformText(specular, specCount, i);
+                glUniform1i(shader.locateUniform(TEX_SPECULAR + specCount), i);
                 specCount++;
             } else {
-                shader.setUniformText(specular, diffCount, i);
+                glUniform1i(shader.locateUniform(TEX_SPECULAR + diffCount), i);
                 diffCount++;
             }
         }
@@ -92,6 +107,7 @@ public class Material {
 
 
     public void bind(){
+
         transferUniforms();
 
         mapTextureUniforms();
@@ -100,6 +116,9 @@ public class Material {
             glActiveTexture(i);
             textures[i].bind();
         }
+
+        shader.bind();
+        
     }
     
 }

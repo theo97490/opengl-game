@@ -8,7 +8,7 @@ public class GameEngine implements Runnable{
     private IGameLogic gameLogic;
     private Window window;
 
-    private float awaitTime = 1f / 60;
+    private float awaitTime = 1f / 61f;
 
     public GameEngine(String windowTitle, int width, int height, IGameLogic gameLogic){
         gameloopThread = new Thread(this, "GAME_LOOP_THREAD");
@@ -42,6 +42,9 @@ public class GameEngine implements Runnable{
             currTime = GLFW.glfwGetTime();
             timeElapsed = currTime - prevTime;
             prevTime = currTime;
+
+            //System.out.println(1/timeElapsed);
+
 
 
             gameLogic.input(window);

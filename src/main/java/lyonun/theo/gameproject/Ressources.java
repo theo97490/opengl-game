@@ -35,7 +35,10 @@ public final class Ressources {
         File[] files = new File(TEXTURE_PATH).listFiles();
         for (File directory : files){
             if (directory.isDirectory()){
-                voxModels.add(new VoxModel(directory.getName(), processVoxTextures(directory)));
+                Material material = new Material("basic");
+                material.setTextures(processVoxTextures(directory));
+                
+                voxModels.add(new VoxModel(directory.getName(), material));
             }
         }
 
