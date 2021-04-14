@@ -12,6 +12,11 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class Texture {
+    public static final String SPECULAR = "specular";
+    public static final String DIFFUSE = "diffuse";
+    public static final String AMBIENT = "ambient";
+
+
     private int textID;
     private String type;
 

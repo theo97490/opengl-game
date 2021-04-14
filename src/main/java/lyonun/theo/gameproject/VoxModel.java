@@ -86,10 +86,11 @@ public class VoxModel extends Renderable{
     }
 
     public void draw(Matrix4f projView){
-        mesh.setMaterial(material);
+        mesh.material = material;
         
         ByteBuffer buff = MemoryUtil.memAlloc(16 * 4);
 
+        //TODO utiliser les uniforms buffers pour les matrices View Projection
         projView.mul(new Matrix4f().translate(position).rotateXYZ(rotation)).get(buff);
         material.setParameters("MVP", buff);
 
