@@ -76,6 +76,7 @@ public class Mesh {
         material.bind();
 
         glDrawElements(GL_TRIANGLES, indexSize, GL_UNSIGNED_INT, 0);
+
     }
 
     public void cleanup(){

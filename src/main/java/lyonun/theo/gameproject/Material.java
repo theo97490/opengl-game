@@ -92,7 +92,7 @@ public class Material {
                 glUniform1i(shader.locateUniform(TEX_SPECULAR + specCount), i);
                 specCount++;
             } else {
-                glUniform1i(shader.locateUniform(TEX_SPECULAR + diffCount), i);
+                glUniform1i(shader.locateUniform(TEX_DIFFUSE + diffCount), i);
                 diffCount++;
             }
         }
@@ -107,17 +107,17 @@ public class Material {
 
 
     public void bind(){
+        shader.bind();
 
         transferUniforms();
 
         mapTextureUniforms();
-        
+
         for (int i = 0; i < textures.length; i++ ){
-            glActiveTexture(i);
+            glActiveTexture(GL_TEXTURE0 + i);
+
             textures[i].bind();
         }
-
-        shader.bind();
         
     }
     

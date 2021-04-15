@@ -25,7 +25,7 @@ public class GameLogic extends IGameLogic {
 	
 		//renderQueue.add(getVoxModel("grass-block"));
 		try{
-			Model3D model = new Model3D("./models/backpack/backpack.obj");
+			Model3D model = new Model3D("./models/untitled.obj");
 			renderQueue.add(model);
 		} catch (LoadException e ){
 			System.out.println(e.getMessage());

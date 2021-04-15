@@ -19,12 +19,15 @@ public class Texture {
 
     private int textID;
     private String type;
+    private String path;
 
     public String getType() { return type; }
+    public String getPath() { return path; }
 
     public Texture(File image, String type){
         this.textID = glGenTextures();
         this.type = type;
+        this.path = image.getPath().replace("\\", "/");
 
 
         glBindTexture(GL_TEXTURE_2D, textID);

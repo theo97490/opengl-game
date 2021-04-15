@@ -1,6 +1,7 @@
 package lyonun.theo.gameproject;
 
 import java.io.File;
+import java.lang.reflect.Array;
 import java.nio.ByteBuffer;
 import java.nio.FloatBuffer;
 import java.nio.IntBuffer;
@@ -13,6 +14,7 @@ import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.lwjgl.assimp.*;
 
+import static org.lwjgl.opengl.GL46.*;
 
 public class Model3D extends Renderable{
     public static final int[] AITextSupport = { Assimp.aiTextureType_DIFFUSE, 
@@ -20,6 +22,9 @@ public class Model3D extends Renderable{
 
 
     private ArrayList<Mesh> meshes;
+    private ArrayList<Texture> texLoaded;
+
+    private String directory;
 
     
 
@@ -27,6 +32,9 @@ public class Model3D extends Renderable{
         this.meshes = new ArrayList<>(1);
         this.position = new Vector3f(0,0,0);
         this.rotation = new Vector3f(0,0,0);
+        this.directory = path.substring(0, path.lastIndexOf("/") + 1);
+        this.texLoaded = new ArrayList<>(1);
+ 
         
         AIScene scene = Assimp.aiImportFile(path, Assimp.aiProcess_Triangulate | Assimp.aiProcess_FlipUVs);
         if (scene != null)
@@ -61,6 +69,7 @@ public class Model3D extends Renderable{
 
         //Processing material
         //HACK Hardcoded shader
+        //TODO A optimiser pour réutiliser des materials déjà processed
         Material mat = new Material("basic");
         if (mesh.mMaterialIndex() >= 0){
             AIMaterial aiMaterial = AIMaterial.create(scene.mMaterials().get(mesh.mMaterialIndex()));
@@ -85,6 +94,7 @@ public class Model3D extends Renderable{
             mesh.mNormals().get(vertI).x();
             mesh.mNormals().get(vertI).x();
             */
+
     
             AIVector3D tex = mesh.mTextureCoords(0).get(vertI);
     
@@ -92,7 +102,6 @@ public class Model3D extends Renderable{
                 vertexBuffer.put(tex.x());
                 vertexBuffer.put(tex.y());
             } 
-            //HACK c'est très dodgy 
             else{
                 vertexBuffer.put(0);
                 vertexBuffer.put(0);
@@ -100,13 +109,16 @@ public class Model3D extends Renderable{
 
         }
 
-        return vertexBuffer;
+        //N'oubliez jamais de flip le buffer si vous le créez de toute pièce sinon c'est la merde
+        // Flip => mettre en read only et reset la position du curseur à 0 
+        return vertexBuffer.flip();
     }
 
 
     private IntBuffer processIndices(AIMesh mesh){
         ArrayList<Integer> indexData = new ArrayList<>(100);
 
+        //FIXME Indices buggés
         for (int faceIndex = 0; faceIndex < mesh.mNumFaces(); faceIndex++){
             AIFace face = mesh.mFaces().get(faceIndex);
             //mNumIndices toujours égal à 3 normalement car on a crée la scene avec le flag aiProcess_Triangulate 
@@ -144,16 +156,23 @@ public class Model3D extends Renderable{
             for (int i = 0; i < texCount; i++, texCounter++){
                 AIString aipath = AIString.calloc();
                 Assimp.aiGetMaterialTexture(aimaterial, aitype, i, aipath, null, (IntBuffer) null, null, null, null, null);
-    
-                String type = "";
-                if ( aitype == Assimp.aiTextureType_DIFFUSE )
-                    type = Texture.DIFFUSE;
-                else if ( aitype == Assimp.aiTextureType_AMBIENT )
-                    type = Texture.AMBIENT;
-                else if ( aitype == Assimp.aiTextureType_SPECULAR )
-                    type = Texture.SPECULAR;
-    
-                textures[texCounter] = new Texture(new File("./models/backpack/" + aipath.dataString()), type);
+                    
+                Texture tex = getProcessedTexture(directory + aipath.dataString());
+                if (  tex == null ){
+                    String type = "";
+
+                    if ( aitype == Assimp.aiTextureType_DIFFUSE )
+                        type = Texture.DIFFUSE;
+                    else if ( aitype == Assimp.aiTextureType_AMBIENT )
+                        type = Texture.AMBIENT;
+                    else if ( aitype == Assimp.aiTextureType_SPECULAR )
+                        type = Texture.SPECULAR;
+                        
+                    tex = new Texture(new File(directory + aipath.dataString()), type);
+                    texLoaded.add(tex);
+                }
+
+                textures[texCounter] = tex;
 
             }
     
@@ -161,6 +180,15 @@ public class Model3D extends Renderable{
 
         return textures;
 
+    }
+
+    private Texture getProcessedTexture(String path){
+        for (Texture tex : texLoaded){
+            if ( tex.getPath().equals(path))
+                return tex;
+        }
+
+        return null;
     }
 
     public void draw(Matrix4f projView){
